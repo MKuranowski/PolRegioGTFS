@@ -29,10 +29,10 @@ export class CSVFile {
   }
 
   /**
-     * Opens a CSV file for writing - creating a file if it does not exist,
-     * and truncating one if it were to exist.
-     * @param filename name of the file to open
-     */
+   * Opens a CSV file for writing - creating a file if it does not exist,
+   * and truncating one if it were to exist.
+   * @param filename name of the file to open
+   */
   static async open(filename: string | URL): Promise<CSVFile> {
     return new CSVFile(
       await Deno.open(filename, { write: true, truncate: true, create: true }),

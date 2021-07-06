@@ -205,7 +205,7 @@ export class Endpoint {
    * Fetches and returns details about a particular station, with a list of departures for today
    * @param slug slug of the station
    */
-  async station_departures(
+  async stationDepartures(
     stationSlug: string,
   ): Promise<StationDetails<StationDepartureTarget>> {
     const url = new URL(stationSlug, new URL("station_departures/", this.base));
@@ -218,7 +218,7 @@ export class Endpoint {
    * Fetches and returns details about a particular station, with a list of arrivals for today
    * @param slug slug of the station
    */
-  async station_arrivals(
+  async stationArrivals(
     stationSlug: string,
   ): Promise<StationDetails<StationArrivalTarget>> {
     const url = new URL(stationSlug, new URL("station_arrivals/", this.base));
@@ -243,7 +243,7 @@ export class Endpoint {
    * Lists all 'versions' of a train and corresponding dates to every train 'version'.
    * @param train meta-data about a train
    */
-  async train_calendars(train: CarrierTrain): Promise<TrainCalendar[]> {
+  async trainCalendars(train: CarrierTrain): Promise<TrainCalendar[]> {
     const url = new URL("train_calendars", this.base);
     url.searchParams.set("brand", train.brand);
     url.searchParams.set("nr", train.nr.toString());
@@ -256,7 +256,7 @@ export class Endpoint {
    * Fetches and returns metadata and all stations of a particular train version
    * @param train_id id of the train version
    */
-  async train_data(trainID: number): Promise<Train> {
+  async trainData(trainID: number): Promise<Train> {
     const url = new URL(trainID.toString(), new URL("trains/", this.base));
     return await this.call(url) as Train;
   }

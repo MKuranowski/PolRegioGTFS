@@ -354,7 +354,7 @@ export class PolRegioGTFS {
       // Update Time
       const updateTime = datetime.parse(
         `${agency.update_time} ${agency.update_date}`,
-        "hh:mm dd.MM.yyyy",
+        "HH:mm dd.MM.yyyy",
       );
       if (updateTime > this.updateTime) this.updateTime = updateTime;
     }

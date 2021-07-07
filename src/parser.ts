@@ -647,6 +647,15 @@ export class PolRegioGTFS {
 
     console.log("Parsing routes");
     await this.parseRoutes();
+
+    console.log("Compressing to polregio.zip");
+    await this.compress();
+  }
+
+  async compress(): Promise<void> {
+    const p = Deno.run({ cmd: ["zip", "-rj", "polregio.zip", "gtfs"] });
+    const s = await p.status();
+    if (!s.success) throw "Unable to compress files into polregio.zip";
   }
 
   static async main() {

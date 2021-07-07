@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2021 Mikołaj Kuranowski
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 /** Any type that can be serialized to a string */
 type Stringable = string | null | undefined | { toString(): string };
 

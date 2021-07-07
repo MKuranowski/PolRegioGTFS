@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2021 Mikołaj Kuranowski
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 type Color = [string, string];
 type Route = {
   code: string;

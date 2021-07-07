@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2021 Mikołaj Kuranowski
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 import { Endpoint, getStationsWithLocation } from "./api.ts";
 import type {
   CarrierTrain,

@@ -261,9 +261,9 @@ export class PolRegioGTFS {
   transfers?: CSVFile;
 
   /**
-     * Prepares attached file handles, needs to be called prior
-     * to starting all of the parsing.
-     */
+   * Prepares attached file handles, needs to be called prior
+   * to starting all of the parsing.
+   */
   async open(): Promise<void> {
     // Open files
     await emptyDir("gtfs");
@@ -308,8 +308,8 @@ export class PolRegioGTFS {
   }
 
   /**
-     * Closes opened file handles
-     */
+   * Closes opened file handles
+   */
   close(): void {
     this.trips?.close();
     this.times?.close();
@@ -318,9 +318,9 @@ export class PolRegioGTFS {
   }
 
   /**
-     * Parses agency data from the API and writes them to the provided CSVFile.
-     * Also sets the `update_time` and `known_carriers` attributes.
-     */
+   * Parses agency data from the API and writes them to the provided CSVFile.
+   * Also sets the `update_time` and `known_carriers` attributes.
+   */
   private async parseAgenciesInto(f: CSVFile): Promise<void> {
     // Write headers
     await f.write_row([
@@ -361,19 +361,19 @@ export class PolRegioGTFS {
   }
 
   /**
-     * Writes agency.txt based on data from the API;
-     * while also setting the `update_time` attribute.
-     */
+   * Writes agency.txt based on data from the API;
+   * while also setting the `update_time` attribute.
+   */
   parseAgencies = WithFile(
     this.parseAgenciesInto.bind(this),
     "gtfs/agency.txt",
   );
 
   /**
-     * Parses route data from the API and writes them to the provided CSVFile.
-     * Needs to be called _after_ parsing trains - as this method expects
-     * `brandsWithBusses` to be filled.
-     */
+   * Parses route data from the API and writes them to the provided CSVFile.
+   * Needs to be called _after_ parsing trains - as this method expects
+   * `brandsWithBusses` to be filled.
+   */
   private async parseRoutesInto(f: CSVFile): Promise<void> {
     // Write header
     await f.write_row([
@@ -425,16 +425,16 @@ export class PolRegioGTFS {
   }
 
   /**
-     * Writes routes.txt based on data from the API.
-     * Needs to be called _after_ parsing trains - as this method expects
-     * the `brands_with_buses` Set to be filled.
-     */
+   * Writes routes.txt based on data from the API.
+   * Needs to be called _after_ parsing trains - as this method expects
+   * the `brands_with_buses` Set to be filled.
+   */
   parseRoutes = WithFile(this.parseRoutesInto.bind(this), "gtfs/routes.txt");
 
   /**
-     * Parses and writes all versions of a particular train
-     * trips.txt, stop_times.txt, calendar_dates.txt and transfers.txt will be modified.
-     */
+   * Parses and writes all versions of a particular train
+   * trips.txt, stop_times.txt, calendar_dates.txt and transfers.txt will be modified.
+   */
   async parseTrain(train: CarrierTrain): Promise<void> {
     console.log(
       `\x1B[2A\x1B[KParsing trains: ${train.brand} ${train.nr} '${train.name ??
@@ -465,9 +465,9 @@ export class PolRegioGTFS {
   }
 
   /**
-     * Parses and writes a particular version of a train.
-     * trips.txt, stop_times.txt and transfers.txt will be modified.
-     */
+   * Parses and writes a particular version of a train.
+   * trips.txt, stop_times.txt and transfers.txt will be modified.
+   */
   async parseTrip(tripID: number): Promise<void> {
     console.log(`\x1B[1A\x1B[KParsing train version: ${tripID}`);
     const data = await this.api.trainData(tripID);
@@ -500,10 +500,10 @@ export class PolRegioGTFS {
   }
 
   /**
-     * Writes a single leg to stop_times.txt.
-     * Also checks (and modifies) route_id column if this leg is operated by a bus
-     * Might update `brandsWithBusses`.
-     */
+   * Writes a single leg to stop_times.txt.
+   * Also checks (and modifies) route_id column if this leg is operated by a bus
+   * Might update `brandsWithBusses`.
+   */
   private async writeSingleLeg(
     gtfsTrip: (string | number)[],
     leg: TrainLeg,
@@ -541,11 +541,11 @@ export class PolRegioGTFS {
   }
 
   /**
-     * Writes multiple legs to trips.txt, stop_times.txt and transfers.txt.
-     * The baseGtfsTrip will be used as a template for all trips.txt rows
-     * - trip_id will be modified with a suffix representing a leg,
-     * - route_id might be modified if a leg is operated by a bus.
-     */
+   * Writes multiple legs to trips.txt, stop_times.txt and transfers.txt.
+   * The baseGtfsTrip will be used as a template for all trips.txt rows
+   * - trip_id will be modified with a suffix representing a leg,
+   * - route_id might be modified if a leg is operated by a bus.
+   */
   private async writeMultipleLegs(
     baseGtfsTrip: (string | number)[],
     legs: TrainLeg[],
@@ -578,9 +578,9 @@ export class PolRegioGTFS {
   }
 
   /**
-     * Walks over every train of every known carrier (from `knownCarriers`) and
-     * calls parseTrain on it.
-     */
+   * Walks over every train of every known carrier (from `knownCarriers`) and
+   * calls parseTrain on it.
+   */
   async parseAllTrains(): Promise<void> {
     for (const [, agencySlug] of this.knownCarriers) {
       for (const brand of await this.api.trains(agencySlug)) {
@@ -592,9 +592,9 @@ export class PolRegioGTFS {
   }
 
   /**
-     * Parses stops from an external source (github.com/MKuranowski/PLRailMap)
-     * and saves **used** stops
-     */
+   * Parses stops from an external source (github.com/MKuranowski/PLRailMap)
+   * and saves **used** stops
+   */
   private async parseStopsInto(f: CSVFile): Promise<void> {
     const unknownStations = new Map(this.usedStations);
     await f.write_row([
@@ -625,10 +625,10 @@ export class PolRegioGTFS {
   }
 
   /**
-     * Writes stops.txt based on data from an external source (github.com/MKuranowski/PLRailMap)
-     * Needs to be called _after_ parsing trains - as this method expects
-     * `usedStations` to be filled.
-     */
+   * Writes stops.txt based on data from an external source (github.com/MKuranowski/PLRailMap)
+   * Needs to be called _after_ parsing trains - as this method expects
+   * `usedStations` to be filled.
+   */
   parseStops = WithFile(this.parseStopsInto.bind(this), "gtfs/stops.txt");
 
   async parseAll(): Promise<void> {

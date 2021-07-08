@@ -615,7 +615,7 @@ export class PolRegioGTFS {
       // Try to remove this station from unknownStations
       // - if the removal failed - this station was not used
       // and can be ignored
-      if (unknownStations.delete(s.id)) continue;
+      if (!unknownStations.delete(s.id)) continue;
       await f.write_row([s.id, s.name, s.lat, s.lon, s.ibnr]);
     }
 

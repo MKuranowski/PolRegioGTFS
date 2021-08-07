@@ -161,9 +161,6 @@ function getBreakLegsAt(
 /**
  * Splits a list of stations into `legs` - as some parts of a trip
  * may be completed by a bus, some by a train.
- * @param stops List of all stations
- * @param force_break_at Additional set of stop indexes where a leg break should occur
- * @returns An array of legs (list of all stations)
  */
 function splitLegs(
   tripID: number,

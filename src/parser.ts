@@ -301,6 +301,7 @@ export class PolRegioGTFS {
         "arrival_time",
         "departure_time",
         "platform",
+        "official_dist_traveled",
       ]),
       this.dates.write_row(["service_id", "date", "exception_type"]),
       this.transfers.write_row([
@@ -458,7 +459,8 @@ export class PolRegioGTFS {
     const dateMap = reverseDateTrainMap(calendar.date_train_map);
 
     for (const [tripID, dates] of dateMap.entries()) {
-      await this.parseTrip(tripID);
+      const ok = await this.parseTrip(tripID);
+      if (!ok) continue;
 
       for (const date of dates) {
         await this.dates?.write_row([
@@ -474,9 +476,17 @@ export class PolRegioGTFS {
    * Parses and writes a particular version of a train.
    * trips.txt, stop_times.txt and transfers.txt will be modified.
    */
-  async parseTrip(tripID: number): Promise<void> {
+  async parseTrip(tripID: number): Promise<boolean> {
     console.log(`\x1B[1A\x1B[KParsing train version: ${tripID}`);
     const data = await this.api.trainData(tripID);
+
+    // Ensure this train has stops
+    if (data.stops.length === 0) {
+      console.warn(color.yellow(
+        "Train " + color.cyan(tripID.toString()) + " has no stops!",
+      ));
+      return false;
+    }
 
     fixTimes(data.stops);
     const legStops = splitLegs(tripID, data.stops, data.train.train_attributes);
@@ -503,6 +513,8 @@ export class PolRegioGTFS {
     } else {
       throw `Train ${tripID} has no legs`;
     }
+
+    return true;
   }
 
   /**
@@ -519,6 +531,9 @@ export class PolRegioGTFS {
       this.brandsWithBusses.add(gtfsTrip[0] as number);
       gtfsTrip[0] = gtfsTrip[0].toString() + "-BUS";
     }
+
+    // Get distance offset
+    const distOffset = leg.stops[0].distance;
 
     // Write to trips.txt
     await this.trips?.write_row(gtfsTrip);
@@ -542,6 +557,7 @@ export class PolRegioGTFS {
         timeToStr(stop.arrival),
         timeToStr(stop.departure),
         stop.platform,
+        (stop.distance - distOffset).toFixed(),
       ]);
     }
   }

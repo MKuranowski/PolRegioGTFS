@@ -529,6 +529,14 @@ export class PolRegioGTFS {
       gtfsTrip[0] = gtfsTrip[0].toString() + "-BUS";
     }
 
+    // Set attributes
+    gtfsTrip[5] = leg.attrs.has(data.ATTRS.WHEELCHAIR) ? "1" : "2";
+    gtfsTrip[6] =
+      (leg.attrs.has(data.ATTRS.BIKES) ||
+          leg.attrs.has(data.ATTRS.BIKES_ALLOWED))
+        ? "1"
+        : "2";
+
     // Get distance offset
     const distOffset = leg.stops[0].distance;
 

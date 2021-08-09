@@ -25,6 +25,7 @@ export const BUS_NAME_SUFFIX = " - Zastępcza Komunikacja Autobusowa";
 export const ATTRS = {
   BIKES: 9,
   WHEELCHAIR: 10,
+  BIKES_ALLOWED: 50,
   BUS: 56,
   REPLACEMENT_BUS: 100,
 };

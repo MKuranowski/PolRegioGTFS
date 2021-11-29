@@ -281,13 +281,14 @@ export interface StationWithLocation {
 export async function getStationsWithLocation(
   url =
     "https://raw.githubusercontent.com/MKuranowski/PLRailMap/master/plrailmap.osm",
-): Promise<StationWithLocation[]> {
+): Promise<[StationWithLocation[], Map<number, number>]> {
   // Make the request and verify success
   const resp = await fetch(url);
   if (!resp.ok) throw new ResponseNotOK(resp);
 
   const parser = new xml.SAXParser();
   const stations: StationWithLocation[] = [];
+  const idChanges: Map<number, number> = new Map();
   const tags: Map<string, string> = new Map();
 
   // Handlers for parser events
@@ -326,6 +327,14 @@ export async function getStationsWithLocation(
         else if (attr.localPart === "lon") lon = attr.value;
       }
 
+      // Force ID change if PolRegio uses an invalid ID
+      if (tags.has("ref:polregio")) {
+        idChanges.set(
+          parseInt(tags.get("ref:polregio")!),
+          parseInt(tags.get("ref")!)
+        );
+      }
+
       // Append to the list
       stations.push({
         "lat": lat!,
@@ -339,5 +348,5 @@ export async function getStationsWithLocation(
 
   // Parse the XML file
   await parser.parse(await resp.text());
-  return stations;
+  return [stations, idChanges];
 }

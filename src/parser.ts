@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { Endpoint, getStationsWithLocation } from "./api.ts";
+import { Endpoint, StationWithLocation, getStationsWithLocation } from "./api.ts";
 import type {
   CarrierTrain,
   Station,
@@ -257,6 +257,12 @@ export class PolRegioGTFS {
   /** The Endpoint instance to request data */
   api: Endpoint = new Endpoint();
 
+  /** List of pre-loaded stations */
+  stations: StationWithLocation[] = [];
+
+  /** Map to change station IDs on the fly */
+  stationIDChanges: Map<number, number> = new Map();
+
   // CSVFile handles for some of the files used by the Parser
   trips?: CSVFile;
   times?: CSVFile;
@@ -312,6 +318,13 @@ export class PolRegioGTFS {
   }
 
   /**
+   * Loads station data into memory
+   */
+  async loadStations(): Promise<void> {
+    [this.stations, this.stationIDChanges] = await getStationsWithLocation();
+  }
+
+  /**
    * Closes opened file handles
    */
   close(): void {
@@ -319,6 +332,13 @@ export class PolRegioGTFS {
     this.times?.close();
     this.dates?.close();
     this.transfers?.close();
+  }
+
+  private fixStops(stops: TrainStop[]): TrainStop[] {
+    for (const stop of stops) {
+      stop.station_id = this.stationIDChanges.get(stop.station_id) ?? stop.station_id;
+    }
+    return stops;
   }
 
   /**
@@ -486,6 +506,7 @@ export class PolRegioGTFS {
     }
 
     fixTimes(data.stops);
+    this.fixStops(data.stops);
     const legStops = splitLegs(tripID, data.stops, data.train.train_attributes);
     const legs = assignAttrsToLegs(
       tripID,
@@ -632,7 +653,7 @@ export class PolRegioGTFS {
       "stop_IBNR",
     ]);
 
-    for (const s of await getStationsWithLocation()) {
+    for (const s of this.stations) {
       // Try to remove this station from unknownStations
       // - if the removal failed - this station was not used
       // and can be ignored
@@ -659,6 +680,9 @@ export class PolRegioGTFS {
   parseStops = WithFile(this.parseStopsInto.bind(this), "gtfs/stops.txt");
 
   async parseAll(): Promise<void> {
+    console.log("Loading station data");
+    await this.loadStations();
+
     console.log("Parsing agencies");
     await this.parseAgencies();
 

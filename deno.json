@@ -1,0 +1,12 @@
+{
+    "$schema": "https://cdn.deno.land/deno/versions/v1.16.3/raw/cli/schemas/config-file.v1.json",
+    "fmt": {
+        "files": {
+            "include": ["src"]
+        },
+        "options": {
+            "indentWidth": 4,
+            "lineWidth": 99
+        }
+    }
+}

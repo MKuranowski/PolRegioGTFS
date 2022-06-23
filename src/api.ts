@@ -326,9 +326,9 @@ export async function getStationsWithLocation(
             }
 
             // Force ID change if PolRegio uses an invalid ID
-            if (tags.has("ref:polregio")) {
+            if (tags.has("ref:2")) {
                 idChanges.set(
-                    parseInt(tags.get("ref:polregio")!),
+                    parseInt(tags.get("ref:2")!),
                     parseInt(tags.get("ref")!),
                 );
             }

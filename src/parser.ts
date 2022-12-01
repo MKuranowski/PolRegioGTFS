@@ -400,7 +400,7 @@ export class PolRegioGTFS {
             // Get external data
             const meta = data.ROUTES.get(route.id);
             if (meta === undefined) {
-                throw `Agency data for carrier ${route.id} (${route.name}) is missing`;
+                throw `Route data for carrier ${route.id} (${route.name}) is missing`;
             }
 
             // Extract colors

@@ -345,7 +345,11 @@ export class PolRegioGTFS {
             // Get data for agency
             const meta = data.AGENCIES.get(agency.id);
             if (meta === undefined) {
-                throw `Agency data for carrier ${agency.id} (${agency.name}) is missing`;
+                console.log(
+                    color.red("Skipping agency"),
+                    color.cyan(`${agency.id} (${agency.name})`),
+                );
+                continue;
             }
 
             // Write to agency.txt
@@ -397,6 +401,9 @@ export class PolRegioGTFS {
 
         // Iterate over every brand - which is mapped to GTFS routes
         for (const route of await this.api.brands()) {
+            // Skip skipped agencies
+            if (!this.knownCarriers.has(route.carrier_id)) continue;
+
             // Get external data
             const meta = data.ROUTES.get(route.id);
             if (meta === undefined) {

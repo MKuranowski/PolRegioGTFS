@@ -145,7 +145,7 @@ export class Endpoint {
      * @param base base URL of the API
      */
     constructor(pause?: number, base?: string) {
-        this.pause = pause ?? SECOND * (1 / 15);
+        this.pause = pause ?? SECOND / 12;
         this.base = new URL(base ?? "https://bilety.polregio.pl/pl/");
     }
 

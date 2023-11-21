@@ -22,14 +22,14 @@ export const toCSV = (row: Stringable[]) =>
     row.map((e) => escapeCell(stringify(e))).join(",") + "\r\n";
 
 /**
- * CSVFile is a small abstraction over Deno.File to help with writing CSV files.
+ * CSVFile is a small abstraction over Deno.FsFile to help with writing CSV files.
  */
 export class CSVFile {
-    handle: Deno.File;
+    handle: Deno.FsFile;
     private encoder = new TextEncoder();
 
     /** Create a CSVFile on a particular file */
-    constructor(handle: Deno.File) {
+    constructor(handle: Deno.FsFile) {
         this.handle = handle;
     }
 

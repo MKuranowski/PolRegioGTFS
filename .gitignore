@@ -3,3 +3,4 @@ gtfs
 *.zip
 *.html
 polregio_loop.sh
+deno.lock

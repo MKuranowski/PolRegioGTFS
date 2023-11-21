@@ -699,9 +699,14 @@ export class PolRegioGTFS {
     }
 
     async compress(): Promise<void> {
-        const p = Deno.run({ cmd: ["zip", "-rj", "polregio.zip", "gtfs"] });
-        const s = await p.status();
-        if (!s.success) throw "Unable to compress files into polregio.zip";
+        const cmd = new Deno.Command("zip", {
+            args: ["-rj", "polregio.zip", "gtfs"],
+            stdin: "null",
+            stdout: "inherit",
+            stderr: "inherit",
+        });
+        const output = await cmd.output();
+        if (!output.success) throw "Unable to compress files into polregio.zip";
     }
 
     static async main() {

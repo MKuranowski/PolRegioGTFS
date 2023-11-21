@@ -152,10 +152,9 @@ export class Endpoint {
     /**
      * Makes a call to the API
      * @param where URL to request
-     * @param accessors On success, access provided elements before returning the JSON object
      * @returns the JSON data
      */
-    private async call(where: URL, accessors?: string[]): Promise<unknown> {
+    private async do_call(where: URL): Promise<unknown> {
         // Timeout
         const now: number = Date.now();
         const delta = now - this.lastCall;
@@ -171,10 +170,40 @@ export class Endpoint {
         if (!response.ok) throw new ResponseNotOK(response);
 
         // Parse response
-        let data = await response.json();
+        return await response.json();
+    }
+
+    /**
+     * Makes a call to the API, attempting `tries` times
+     * @param where URL to request
+     * @returns the JSON data
+     */
+    private async do_call_with_retry(where: URL, tries: number): Promise<unknown> {
+        console.assert(tries > 0);
+        let err: unknown = undefined;
+        for (let i = 0; i < tries; ++i) {
+            try {
+                return await this.do_call(where);
+            } catch (e) {
+                console.error("Fetch to", where, "failed on attempt", i + 1, ":", e);
+                err = e;
+            }
+        }
+        throw err;
+    }
+
+    /**
+     * Makes a call to the API, trying `timeout` times
+     * @param where URL to request
+     * @param accessors On success, access provided elements before returning the JSON object
+     * @returns the JSON data
+     */
+    private async call(where: URL, accessors?: string[], tries?: number): Promise<unknown> {
+        let data = await this.do_call_with_retry(where, tries ?? 3);
 
         // Get accessors
         for (const accessor of accessors ?? []) {
+            // @ts-ignore: yeah it's unknown by design
             data = data[accessor];
         }
 

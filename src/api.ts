@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { SECOND } from "https://deno.land/std@0.100.0/datetime/mod.ts";
+import { SECOND } from "https://deno.land/std@0.207.0/datetime/mod.ts";
 import * as xml from "https://deno.land/x/xmlp@v0.3.0/mod.ts";
 
 // --- SCHEDULES JSON API --- //

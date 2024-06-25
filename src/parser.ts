@@ -234,6 +234,10 @@ export class PolRegioGTFS {
     /** All known carriers (id → slug) */
     knownCarriers: Map<number, string> = new Map();
 
+    /** All used route_ids (API brand_ids) by exported trips;
+     * (route/brand id → agency/carrier id) */
+    usedRoutes: Map<number, number> = new Map();
+
     /** IDs of all used stations (id -> Station) */
     usedStations: Map<string, Station> = new Map();
 
@@ -399,15 +403,22 @@ export class PolRegioGTFS {
             "route_text_color",
         ]);
 
-        // Iterate over every brand - which is mapped to GTFS routes
-        for (const route of await this.api.brands()) {
-            // Skip skipped agencies
-            if (!this.knownCarriers.has(route.carrier_id)) continue;
+        // Iterate over every used brand - which is mapped to GTFS routes
+        const routes = Array.from(this.usedRoutes.keys());
+        routes.sort((a, b) => a - b);
+
+        for (const route_id of routes) {
+            const agency_id = this.usedRoutes.get(route_id)!;
+
+            // Ensure only routes belonging to known agencies are used
+            if (!this.knownCarriers.has(agency_id)) {
+                throw `Unknown agency/carrier ${agency_id} used by route/brand ${route_id}`;
+            }
 
             // Get external data
-            const meta = data.ROUTES.get(route.id);
+            const meta = data.ROUTES.get(route_id);
             if (meta === undefined) {
-                throw `Route data for carrier ${route.id} (${route.name}) is missing`;
+                throw `Route data for brand/route ${route_id} is missing`;
             }
 
             // Extract colors
@@ -415,8 +426,8 @@ export class PolRegioGTFS {
 
             // Write to routes.txt
             await f.write_row([
-                route.carrier_id,
-                route.id,
+                agency_id,
+                route_id,
                 meta.code,
                 meta.name,
                 "2",
@@ -425,11 +436,11 @@ export class PolRegioGTFS {
             ]);
 
             // Check if a bus route needs to be added
-            if (this.brandsWithBusses.has(route.id)) {
+            if (this.brandsWithBusses.has(route_id)) {
                 [color, textColor] = meta.busColor ?? data.BUS_COLOR;
                 await f.write_row([
-                    route.carrier_id,
-                    route.id.toString() + "-BUS",
+                    agency_id,
+                    route_id.toString() + "-BUS",
                     data.BUS_CODE_PREFIX + meta.code,
                     meta.name + data.BUS_NAME_SUFFIX,
                     "3",
@@ -527,6 +538,8 @@ export class PolRegioGTFS {
         } else {
             throw `Train ${tripID} has no legs`;
         }
+
+        this.usedRoutes.set(data.train.brand_id, data.train.carrier_id);
 
         return true;
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Mikołaj Kuranowski
+ * Copyright (c) 2021, 2024 Mikołaj Kuranowski
  *
  * SPDX-License-Identifier: MIT
  */
@@ -8,9 +8,9 @@ import { Endpoint, getStationsWithLocation, StationWithLocation } from "./api.ts
 import type { CarrierTrain, Station, Time, TrainAttribute, TrainStop } from "./api.ts";
 import { CSVFile } from "./csv.ts";
 import * as data from "./data.ts";
-import * as datetime from "https://deno.land/std@0.207.0/datetime/mod.ts";
-import * as color from "https://deno.land/std@0.207.0/fmt/colors.ts";
-import { emptyDir } from "https://deno.land/std@0.207.0/fs/mod.ts";
+import * as datetime from "https://deno.land/std@0.224.0/datetime/mod.ts";
+import * as color from "https://deno.land/std@0.224.0/fmt/colors.ts";
+import { emptyDir } from "https://deno.land/std@0.224.0/fs/mod.ts";
 
 // TrainLeg is a type used internally for representing TrainLegs with assigned attributes
 type TrainLeg = { attrs: Set<number>; stops: TrainStop[] };

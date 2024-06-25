@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Mikołaj Kuranowski
+ * Copyright (c) 2021, 2024 Mikołaj Kuranowski
  *
  * SPDX-License-Identifier: MIT
  */
@@ -33,6 +33,7 @@ export const ATTRS = {
 export const ROUTES: Map<number, Route> = new Map([
     [3, { code: "REG", name: "Regio" }],
     [4, { code: "IR", name: "interRegio" }],
+    [18, { code: "MR", name: "musicRegio" }],
     [20, { code: "PRS", name: "PolRegio - Specjalny" }],
     [48, { code: "SR", name: "superRegio" }],
 ]);

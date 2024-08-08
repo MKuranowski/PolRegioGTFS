@@ -1,6 +1,3 @@
-.vscode
-gtfs
+.venv
 *.zip
-*.html
 polregio_loop.sh
-deno.lock

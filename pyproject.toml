@@ -1,0 +1,20 @@
+[build-system]
+requires = ["flit_core ~=3.2"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "PolRegioGTFS"
+authors = [{name = "Mikołaj Kuranowski", email = "mkuranowski+pypackages@gmail.com"}]
+readme = "README.md"
+dynamic = ["version"]
+
+[tool.black]
+line-length = 100
+exclude = "pyroutelib3/osm/pbf"
+
+[tool.isort]
+profile = "black"
+skip = ["pyroutelib3/osm/pbf"]
+
+[tool.pyright]
+typeCheckingMode = "strict"

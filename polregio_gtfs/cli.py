@@ -1,8 +1,9 @@
 import argparse
 import logging
+from datetime import datetime
 
 import impuls
-from impuls.model import Agency
+from impuls.model import Agency, FeedInfo
 
 from .load_station_data import LoadStationData
 from .scrape_api import ScrapeAPI
@@ -69,6 +70,15 @@ class PolRegioGTFS(impuls.App):
                 impuls.tasks.GenerateTripHeadsign(),
                 SplitBusLegs(),
                 impuls.tasks.ModifyRoutesFromCSV("routes.csv", must_curate_all=True),
+                impuls.tasks.AddEntity(
+                    entity=FeedInfo(
+                        publisher_name="Mikołaj Kuranowski",
+                        publisher_url="https://mkuran.pl/gtfs/",
+                        lang="pl",
+                        version=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    ),
+                    task_name="AddFeedInfo",
+                ),
                 impuls.tasks.SaveGTFS(
                     headers={
                         "agency": (

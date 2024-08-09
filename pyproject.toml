@@ -10,11 +10,9 @@ dynamic = ["version"]
 
 [tool.black]
 line-length = 100
-exclude = "pyroutelib3/osm/pbf"
 
 [tool.isort]
 profile = "black"
-skip = ["pyroutelib3/osm/pbf"]
 
 [tool.pyright]
 typeCheckingMode = "strict"

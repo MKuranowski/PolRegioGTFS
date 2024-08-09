@@ -3,6 +3,7 @@ import argparse
 import impuls
 from impuls.model import Agency
 
+from .load_station_data import LoadStationData
 from .scrape_api import ScrapeAPI
 
 
@@ -22,6 +23,7 @@ class PolRegioGTFS(impuls.App):
                     task_name="AddAgency",
                 ),
                 ScrapeAPI(),
+                LoadStationData(),
                 impuls.tasks.GenerateTripHeadsign(),
                 impuls.tasks.SaveGTFS(
                     headers={
@@ -60,6 +62,11 @@ class PolRegioGTFS(impuls.App):
                     target="polregio.zip",
                 ),
             ],
+            resources={
+                "pl_rail_map.osm": impuls.HTTPResource.get(
+                    "https://raw.githubusercontent.com/MKuranowski/PLRailMap/master/plrailmap.osm"
+                ),
+            },
             options=options,
         )
 

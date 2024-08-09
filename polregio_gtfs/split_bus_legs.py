@@ -1,3 +1,6 @@
+# © Copyright 2024 Mikołaj Kuranowski
+# SPDX-License-Identifier: MIT
+
 from copy import copy
 from typing import NamedTuple, cast
 

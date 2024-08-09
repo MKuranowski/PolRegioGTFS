@@ -1,3 +1,6 @@
+# © Copyright 2024 Mikołaj Kuranowski
+# SPDX-License-Identifier: MIT
+
 from dataclasses import dataclass
 from pathlib import Path
 from typing import cast

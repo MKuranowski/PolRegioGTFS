@@ -1,3 +1,6 @@
+# © Copyright 2024 Mikołaj Kuranowski
+# SPDX-License-Identifier: MIT
+
 import logging
 from collections import defaultdict
 from typing import Iterable, Mapping

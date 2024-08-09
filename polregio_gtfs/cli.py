@@ -67,6 +67,7 @@ class PolRegioGTFS(impuls.App):
                 ),
                 impuls.tasks.GenerateTripHeadsign(),
                 SplitBusLegs(),
+                impuls.tasks.ModifyRoutesFromCSV("routes.csv", must_curate_all=True),
                 impuls.tasks.SaveGTFS(
                     headers={
                         "agency": (
@@ -116,6 +117,7 @@ class PolRegioGTFS(impuls.App):
                 "pl_rail_map.osm": impuls.HTTPResource.get(
                     "https://raw.githubusercontent.com/MKuranowski/PLRailMap/master/plrailmap.osm"
                 ),
+                "routes.csv": impuls.LocalResource("routes.csv"),
             },
             options=options,
         )

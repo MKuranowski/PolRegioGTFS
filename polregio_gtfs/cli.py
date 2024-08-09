@@ -6,6 +6,7 @@ from impuls.model import Agency
 
 from .load_station_data import LoadStationData
 from .scrape_api import ScrapeAPI
+from .split_bus_legs import SplitBusLegs
 
 
 class PolRegioGTFS(impuls.App):

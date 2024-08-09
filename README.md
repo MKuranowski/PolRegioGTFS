@@ -21,15 +21,25 @@ or under the CC0-1.0 license.
 Running
 -------
 
-PolRegioGTFS is written in TypeScript for the [Deno runtime](https://deno.land/).
-Additionally, in order to create a zip file, Info-Zip is required - on most Linux distribution
-the required package is named `zip`.
+PolRegioGTFS is written in Python with the [Impuls framework](https://github.com/MKuranowski/Impuls).
 
-After installing the following requirements run `./polregiogtfs.sh` - which sets up
-required permissions for the Deno runtime and simply calls PolRegioGTFS.main().
+To set up the project, run:
 
-As it is necessary to make a lot of calls to the API in order to get _all_ of the schedules
-it might take a dozen or so minutes for the script to complete.
+```terminal
+$ python3 -m venv .venv
+$ . .venv/bin/activate
+$ pip install -Ur requirements.txt
+```
+
+Then, run:
+
+```terminal
+$ python3 -m polregio_gtfs
+```
+
+The resulting schedules will be put in a file called `polregio.zip`.
+The scraper needs to make a lot of calls to the underlying API, so the process
+might take a couple of minutes.
 
 License
 -------

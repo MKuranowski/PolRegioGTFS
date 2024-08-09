@@ -66,6 +66,7 @@ class PolRegioGTFS(impuls.App):
                     statement=r"UPDATE trips SET short_name = re_sub('\bI\b', 'i', short_name)",
                 ),
                 impuls.tasks.GenerateTripHeadsign(),
+                SplitBusLegs(),
                 impuls.tasks.SaveGTFS(
                     headers={
                         "agency": (
@@ -100,6 +101,13 @@ class PolRegioGTFS(impuls.App):
                             "platform",
                         ),
                         "calendar_dates": ("service_id", "date", "exception_type"),
+                        "transfers": (
+                            "from_stop_id",
+                            "to_stop_id",
+                            "from_trip_id",
+                            "to_trip_id",
+                            "transfer_type",
+                        ),
                     },
                     target="polregio.zip",
                 ),

@@ -1,4 +1,5 @@
 import argparse
+import logging
 
 import impuls
 from impuls.model import Agency
@@ -69,6 +70,9 @@ class PolRegioGTFS(impuls.App):
             },
             options=options,
         )
+
+    def before_run(self) -> None:
+        logging.getLogger("urllib3").setLevel(logging.INFO)
 
 
 def main() -> None:

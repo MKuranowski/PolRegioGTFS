@@ -23,7 +23,12 @@ class ScrapeAPI(impuls.Task):
             self._scrape_carrier("polregio-przewozy-regionalne", r.db)
 
     def _check_carriers(self) -> None:
-        raise NotImplementedError
+        carriers = {i["slug"] for i in self.endpoint.carriers()}
+        if "polregio-przewozy-regionalne" not in carriers:
+            raise impuls.errors.DataError(
+                "API is not reporting that carrier 'polregio-przewozy-regionalne' is available. "
+                f"All carriers: {carriers}."
+            )
 
     def _scrape_carrier(self, carrier_slug: str, db: impuls.DBConnection) -> None:
         for brand in self.endpoint.carrier_train_lists(carrier_slug):

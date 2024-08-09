@@ -49,6 +49,22 @@ class PolRegioGTFS(impuls.App):
                         "END"
                     ),
                 ),
+                impuls.tasks.ExecuteSQL(
+                    task_name="NormalizeTrainNameSKA",
+                    statement=r"UPDATE trips SET short_name = re_sub('Ska', 'SKA', short_name)",
+                ),
+                impuls.tasks.ExecuteSQL(
+                    task_name="NormalizeTrainNamePKM",
+                    statement=r"UPDATE trips SET short_name = re_sub('Pkm', 'PKM', short_name)",
+                ),
+                impuls.tasks.ExecuteSQL(
+                    task_name="NormalizeTrainNameZKA",
+                    statement=r"UPDATE trips SET short_name = re_sub('Zka', 'ZKA', short_name)",
+                ),
+                impuls.tasks.ExecuteSQL(
+                    task_name="NormalizeTrainNameI",
+                    statement=r"UPDATE trips SET short_name = re_sub('\bI\b', 'i', short_name)",
+                ),
                 impuls.tasks.GenerateTripHeadsign(),
                 impuls.tasks.SaveGTFS(
                     headers={

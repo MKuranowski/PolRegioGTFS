@@ -63,8 +63,8 @@ class SplitBusLegs(Task):
             if idx != 0:
                 db.create(
                     Transfer(
-                        from_stop_id=leg[-1].stop_id,
-                        to_stop_id=leg[-1].stop_id,
+                        from_stop_id=leg[0].stop_id,
+                        to_stop_id=leg[0].stop_id,
                         from_trip_id=f"{train.id}_{idx-1}",
                         to_trip_id=trip.id,
                         type=Transfer.Type.TIMED,

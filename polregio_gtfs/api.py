@@ -69,8 +69,8 @@ class TrainAttribute(NamedTuple):
     description: str
     begin_station_name: str
     end_station_name: str
-    _unknown_1: bool
-    _unknown_2: str
+    unknown_1: bool
+    unknown_2: str
 
 
 class TrainDetails(TypedDict):
@@ -149,8 +149,8 @@ class Endpoint:
     def carriers(self) -> list[Carrier]:
         return self.call("carriers")["carriers"]
 
-    def carrier_train_lists(self, carrier_slug: str) -> list[CarrierTrainsList]:
-        return self.call("carrier_train_lists", carrier=carrier_slug)["carrier_trains_list"]
+    def carrier_trains_lists(self, carrier_slug: str) -> list[CarrierTrainsList]:
+        return self.call("carrier_trains_lists", carrier=carrier_slug)["carrier_trains_lists"]
 
     def stations(self) -> list[Station]:
         return self.call("stations")["stations"]
@@ -172,6 +172,6 @@ class Endpoint:
         return data
 
     @staticmethod
-    def _api_time_to_time_point(x: list[int]) -> TimePoint:
+    def _api_time_to_time_point(x: dict[str, int]) -> TimePoint:
         assert len(x) == 3
-        return TimePoint(hours=x[0], minutes=x[1], seconds=x[2])
+        return TimePoint(hours=x["hour"], minutes=x["minute"], seconds=x["second"])

@@ -95,6 +95,13 @@ class ScrapeAPI(impuls.Task):
                 departure += TimePoint(days=1)
             previous_departure = departure
 
+            # Force "BUS" for bus departures, and only bus departures
+            platform = stop["platform"]
+            if sequence in bus_departures:
+                platform = "BUS"
+            elif platform == "BUS":
+                platform = ""
+
             db.raw_execute(
                 "INSERT INTO stop_times (trip_id, stop_sequence, stop_id, arrival_time,"
                 " departure_time, platform) VALUES (?,?,?,?,?,?)",
@@ -104,7 +111,7 @@ class ScrapeAPI(impuls.Task):
                     stop["station_id"],
                     arrival.total_seconds(),
                     departure.total_seconds(),
-                    "BUS" if sequence in bus_departures else stop["platform"],
+                    platform,
                 ),
             )
 
@@ -131,7 +138,7 @@ class ScrapeAPI(impuls.Task):
                 end = self.pick_attribute_idx(
                     data["train"]["id"],
                     attribute.id,
-                    attribute.begin_station_name,
+                    attribute.end_station_name,
                     name_to_idx,
                     is_start=True,
                 )

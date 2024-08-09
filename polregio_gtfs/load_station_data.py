@@ -56,7 +56,7 @@ class LoadStationData(impuls.Task):
     def execute(self, r: impuls.TaskRuntime) -> None:
         self.to_update = {
             cast(str, i[0]): cast(str, i[1])
-            for i in r.db.raw_execute("SELECT (stop_id, name) FROM stops")
+            for i in r.db.raw_execute("SELECT stop_id, name FROM stops")
         }
         stations = PLRailMapLoader.load_from_file(r.resources["pl_rail_map.osm"].stored_at)
         with r.db.transaction():

@@ -3,6 +3,7 @@
 
 import argparse
 import logging
+import re
 from datetime import datetime
 
 import impuls
@@ -10,7 +11,6 @@ from impuls.model import Agency, FeedInfo
 
 from .load_station_data import LoadStationData
 from .scrape_api import ScrapeAPI
-from .split_bus_legs import SplitBusLegs
 
 
 class PolRegioGTFS(impuls.App):
@@ -71,7 +71,9 @@ class PolRegioGTFS(impuls.App):
                     statement=r"UPDATE trips SET short_name = re_sub('\bI\b', 'i', short_name)",
                 ),
                 impuls.tasks.GenerateTripHeadsign(),
-                SplitBusLegs(),
+                impuls.tasks.SplitTripLegs(
+                    replacement_bus_short_name_pattern=re.compile(r"\bzka\b", re.IGNORECASE),
+                ),
                 impuls.tasks.ModifyRoutesFromCSV("routes.csv", must_curate_all=True),
                 impuls.tasks.AddEntity(
                     entity=FeedInfo(

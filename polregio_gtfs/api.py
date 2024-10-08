@@ -1,6 +1,7 @@
 # © Copyright 2024 Mikołaj Kuranowski
 # SPDX-License-Identifier: MIT
 
+import os
 import time
 from typing import Any, NamedTuple, TypedDict
 
@@ -110,6 +111,9 @@ class Train(TypedDict):
 class Endpoint:
     def __init__(self, pause_s: float = 0.05) -> None:
         self.session = requests.Session()
+        if proxy := os.getenv("POLREGIO_HTTP_PROXY"):
+            self.session.proxies["http"] = proxy
+            self.session.proxies["https"] = proxy
         self.last_call: float = 0.0
         self.pause = pause_s
 

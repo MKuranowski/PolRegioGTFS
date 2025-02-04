@@ -80,7 +80,7 @@ class LoadStationData(impuls.Task):
                     (station.id, station.secondary_id),
                 )
                 db.raw_execute(
-                    "DELETE FROM stop_times WHERE stop_id = ?",
+                    "DELETE FROM stops WHERE stop_id = ?",
                     (station.secondary_id,),
                 )
             else:

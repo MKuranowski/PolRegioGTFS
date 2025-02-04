@@ -86,7 +86,7 @@ class PolRegioGTFS(impuls.App):
                 ),
                 impuls.tasks.SaveGTFS(
                     headers={
-                        "agency": (
+                        "agency.txt": (
                             "agency_id",
                             "agency_name",
                             "agency_url",
@@ -94,8 +94,8 @@ class PolRegioGTFS(impuls.App):
                             "agency_lang",
                             "agency_phone",
                         ),
-                        "stops": ("stop_id", "stop_name", "stop_lat", "stop_lon"),
-                        "routes": (
+                        "stops.txt": ("stop_id", "stop_name", "stop_lat", "stop_lon"),
+                        "routes.txt": (
                             "agency_id",
                             "route_id",
                             "route_short_name",
@@ -104,14 +104,14 @@ class PolRegioGTFS(impuls.App):
                             "route_color",
                             "route_text_color",
                         ),
-                        "trips": (
+                        "trips.txt": (
                             "route_id",
                             "trip_id",
                             "service_id",
                             "trip_headsign",
                             "trip_short_name",
                         ),
-                        "stop_times": (
+                        "stop_times.txt": (
                             "trip_id",
                             "stop_sequence",
                             "stop_id",
@@ -119,8 +119,8 @@ class PolRegioGTFS(impuls.App):
                             "departure_time",
                             "platform",
                         ),
-                        "calendar_dates": ("service_id", "date", "exception_type"),
-                        "transfers": (
+                        "calendar_dates.txt": ("service_id", "date", "exception_type"),
+                        "transfers.txt": (
                             "from_stop_id",
                             "to_stop_id",
                             "from_trip_id",

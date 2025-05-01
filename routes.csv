@@ -1,7 +1,9 @@
 route_id,route_short_name,route_long_name,route_color,route_text_color
 3,REG,PolRegio,E50000,FFFFFF
 4,IR,interRegio,E50000,FFFFFF
+20,PRS,PolRegio Specjalny,E50000,FFFFFF
 48,SR,superRegio,E50000,FFFFFF
 3_BUS,ZKA REG,PolRegio - Zastępcza Komunikacja Autobusowa,F78F1E,000000
 4_BUS,ZKA IR,interRegio - Zastępcza Komunikacja Autobusowa,F78F1E,000000
+20_BUS,ZKA PRS,PolRegio Specjalny - Zastępcza Komunikacja Autobusowa,F78F1E,000000
 48_BUS,ZKA SR,superRegio - Zastępcza Komunikacja Autobusowa,F78F1E,000000

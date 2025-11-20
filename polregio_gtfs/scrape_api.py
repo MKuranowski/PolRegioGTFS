@@ -18,9 +18,11 @@ class ScrapeAPI(impuls.Task):
         super().__init__()
         self.endpoint = api.Endpoint()
         self._added_stations = set[int]()
+        self._scraped_trains = set[int]()
 
     def clear(self) -> None:
         self._added_stations.clear()
+        self._scraped_trains.clear()
 
     def execute(self, r: impuls.TaskRuntime) -> None:
         self.clear()
@@ -69,6 +71,12 @@ class ScrapeAPI(impuls.Task):
         for calendar in self.endpoint.train_calendars(carrier_train):
             train_date_map = self._reverse_date_train_map(calendar["date_train_map"])
             for train_id, dates in train_date_map.items():
+                # The API sometimes sends out duplicate entries for a train
+                if train_id in self._scraped_trains:
+                    continue
+                else:
+                    self._scraped_trains.add(train_id)
+
                 db.raw_execute("INSERT INTO calendars (calendar_id) VALUES (?)", (train_id,))
                 db.raw_execute_many(
                     "INSERT INTO calendar_exceptions (calendar_id,date,exception_type) "

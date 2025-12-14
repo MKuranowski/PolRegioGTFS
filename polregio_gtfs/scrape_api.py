@@ -1,13 +1,13 @@
 # © Copyright 2024 Mikołaj Kuranowski
 # SPDX-License-Identifier: MIT
 
+import json
 import logging
 from collections import defaultdict
 from typing import Iterable, Mapping
-import json
 
 import impuls
-from impuls.model import Date, TimePoint, StopTime
+from impuls.model import Date, TimePoint
 
 from . import api
 
@@ -174,7 +174,7 @@ class ScrapeAPI(impuls.Task):
     ) -> int | None:
         candidates = name_to_idx.get(name)
         if not candidates:
-            self.logger.warn(
+            self.logger.warning(
                 "Train %d attribute %d references unknown station %r",
                 train_id,
                 attribute_id,
@@ -182,7 +182,7 @@ class ScrapeAPI(impuls.Task):
             )
             return None
         elif len(candidates) > 1:
-            self.logger.warn(
+            self.logger.warning(
                 "Train %d attribute %d references ambiguous station %r",
                 train_id,
                 attribute_id,

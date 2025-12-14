@@ -118,6 +118,7 @@ class PolRegioGTFS(impuls.App):
                             "arrival_time",
                             "departure_time",
                             "platform",
+                            "track",
                         ),
                         "calendar_dates.txt": ("service_id", "date", "exception_type"),
                         "transfers.txt": (

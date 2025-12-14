@@ -4,9 +4,10 @@
 import logging
 from collections import defaultdict
 from typing import Iterable, Mapping
+import json
 
 import impuls
-from impuls.model import Date, TimePoint
+from impuls.model import Date, TimePoint, StopTime
 
 from . import api
 
@@ -112,10 +113,11 @@ class ScrapeAPI(impuls.Task):
                 platform = "BUS"
             elif platform == "BUS":
                 platform = ""
+            track = str(stop["track"] or "")
 
             db.raw_execute(
                 "INSERT INTO stop_times (trip_id, stop_sequence, stop_id, arrival_time,"
-                " departure_time, platform) VALUES (?,?,?,?,?,?)",
+                " departure_time, platform, extra_fields_json) VALUES (?,?,?,?,?,?,?)",
                 (
                     train_id,
                     sequence,
@@ -123,6 +125,7 @@ class ScrapeAPI(impuls.Task):
                     arrival.total_seconds(),
                     departure.total_seconds(),
                     platform,
+                    json.dumps({"track": track}),
                 ),
             )
 
